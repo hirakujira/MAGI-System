@@ -3,33 +3,37 @@
 import { useEffect, useState } from "react";
 import { MagiId, MagiResult, PartialResults, Vote } from "@/types/magi";
 
+type Verdict = Vote | "DEADLOCK";
+
+const COLORS: Record<Verdict, string> = {
+  APPROVE: "var(--green-ok)",
+  REJECT: "var(--red-ng)",
+  ABSTAIN: "var(--blue-info)",
+  DEADLOCK: "var(--amber)",
+};
+
+const VERDICT_TEXT: Record<Verdict, string> = {
+  APPROVE: "承 認",
+  REJECT: "否 決",
+  ABSTAIN: "棄 権",
+  DEADLOCK: "膠 着",
+};
+
 function voteBackground(vote: Vote | null): string {
-  if (vote === "APPROVE") return "#52e691";
-  if (vote === "REJECT") return "#a41413";
-  if (vote === "ABSTAIN") return "#3caee0";
-  return "#3caee0";
+  return COLORS[vote ?? "ABSTAIN"];
 }
 
-function verdictText(v: string): string {
-  const map: Record<string, string> = {
-    APPROVE: "承 認",
-    REJECT: "否 決",
-    ABSTAIN: "棄 権",
-    DEADLOCK: "膠 着",
-  };
-  return map[v] ?? "---";
+function verdictText(verdict: Verdict): string {
+  return VERDICT_TEXT[verdict];
 }
 
-function verdictColor(v: string): string {
-  if (v === "APPROVE") return "#52e691";
-  if (v === "REJECT") return "#a41413";
-  if (v === "ABSTAIN") return "#3caee0";
-  return "#ff8d00";
+function verdictColor(verdict: Verdict): string {
+  return COLORS[verdict];
 }
 
 function rand(digits: number) {
-  const min = Math.pow(10, digits - 1);
-  const max = Math.pow(10, digits) - 1;
+  const min = 10 ** (digits - 1);
+  const max = 10 ** digits - 1;
   return String(Math.floor(Math.random() * (max - min + 1)) + min);
 }
 

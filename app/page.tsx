@@ -8,10 +8,15 @@ import { MagiId, MagiResult, PartialResults, Vote } from "@/types/magi";
 import { deliberateMelchior, deliberateBalthasar, deliberateCasper } from "@/app/actions";
 
 const UNITS: MagiId[] = ["MELCHIOR", "BALTHASAR", "CASPER"];
+const ACTIONS = {
+  MELCHIOR: deliberateMelchior,
+  BALTHASAR: deliberateBalthasar,
+  CASPER: deliberateCasper,
+} satisfies Record<MagiId, (topic: string) => Promise<MagiResult>>;
 
 function computeVerdict(results: PartialResults): (Vote | "DEADLOCK") | null {
   const all = UNITS.map((u) => results[u]).filter(Boolean) as MagiResult[];
-  if (all.length < 3) return null;
+  if (all.length !== UNITS.length) return null;
 
   const isCritical = all.filter((r) => r.isCritical).length >= 2;
   if (isCritical) {
@@ -44,16 +49,12 @@ export default function Home() {
     setPartialResults({});
     setError(null);
 
-    const actions = {
-      MELCHIOR:  deliberateMelchior,
-      BALTHASAR: deliberateBalthasar,
-      CASPER:    deliberateCasper,
-    };
-
     const runUnit = async (unit: MagiId) => {
       try {
-        const result = await actions[unit](topic);
+        const result = await ACTIONS[unit](topic);
         setPartialResults((prev) => ({ ...prev, [unit]: result }));
+      } catch {
+        setError("Connection lost");
       } finally {
         setProcessingUnits((prev) => {
           const next = new Set(prev);

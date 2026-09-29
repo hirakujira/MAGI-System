@@ -53,8 +53,6 @@ const LANGS: Record<string, Lang> = {
   },
 };
 
-const STEP_PREFIXES = ["▸", "▸", "▸", "▸"];
-
 interface Props {
   onClose: () => void;
 }
@@ -90,25 +88,28 @@ export default function IntroModal({ onClose }: Props) {
           </table>
 
           <ol className="intro-steps">
-            {lang.steps.map((step, i) => (
-              <li key={i}>
-                <span className="intro-step-prefix">{STEP_PREFIXES[i]}</span>
-                {step.includes("Enter") ? (
-                  <>
-                    {step.split("Enter")[0]}
-                    <kbd>Enter</kbd>
-                    {step.split("Enter")[1]}
-                  </>
-                ) : step}
-              </li>
-            ))}
+            {lang.steps.map((step) => {
+              const [beforeEnter, afterEnter] = step.split("Enter");
+              return (
+                <li key={step}>
+                  <span className="intro-step-prefix">▸</span>
+                  {afterEnter !== undefined ? (
+                    <>
+                      {beforeEnter}
+                      <kbd>Enter</kbd>
+                      {afterEnter}
+                    </>
+                  ) : step}
+                </li>
+              );
+            })}
           </ol>
 
           <div className="intro-verdict-ref">
-            <span style={{ color: "#52e691" }}>承認</span>
-            <span style={{ color: "#a41413" }}>否決</span>
-            <span style={{ color: "#3caee0" }}>棄権</span>
-            <span style={{ color: "#ff8d00" }}>膠着</span>
+            <span style={{ color: "var(--green-ok)" }}>承認</span>
+            <span style={{ color: "var(--red-ng)" }}>否決</span>
+            <span style={{ color: "var(--blue-info)" }}>棄権</span>
+            <span style={{ color: "var(--amber)" }}>膠着</span>
           </div>
 
           <button className="intro-confirm" onClick={onClose}>
