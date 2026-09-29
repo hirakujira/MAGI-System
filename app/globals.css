@@ -4,6 +4,8 @@
 @font-face {
   font-family: "TsukuhouShogoMin";
   src: url("/fonts/TsukuhouShogoMin.woff2") format("woff2");
+  font-weight: 900;
+  font-style: normal;
   font-display: swap;
 }
 
@@ -75,15 +77,33 @@ body {
 
 /* ── Page shell ── */
 .magi-main {
-  max-width: 1200px;
-  margin: 12px auto;
-  padding: 0 12px;
+  min-height: calc(100dvh - 20px);
+  margin: 10px;
+  padding: clamp(18px, 3vh, 36px) clamp(24px, 4vw, 70px);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  background: #050505;
+  border: 1px solid #76241b;
+  border-top: 5px solid var(--red-ng);
+  border-bottom: 5px solid var(--red-ng);
 }
+
+.magi-console { width: 100%; max-width: 1200px; margin: auto; }
+.console-banner { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 0 0 12px; }
+.console-banner h1 { font: 700 20px var(--font-title); letter-spacing: 4px; }
+.console-banner h1 span { font: 12px var(--font-mono); letter-spacing: 2px; color: #d3442e; }
+.console-status { color: var(--green-ok); font-size: 11px; letter-spacing: 2px; text-align: right; }
+.console-status-active { color: var(--amber); }
+.console-status-error { color: #f05b49; }
+.console-footer-right { display: flex; align-items: center; gap: 24px; }
+.console-footer-right .github-link { margin: 0; border-color: var(--amber-dim); color: var(--amber); }
+.console-footer-right .github-link:hover { border-color: var(--amber); color: white; }
 
 /* ── Outer system border ── */
 .system-border {
   background: black;
-  border: 2px solid var(--amber);
+  border: 1px solid var(--amber-dim);
   position: relative;
 }
 
@@ -111,7 +131,7 @@ body {
   grid-template-rows: 20px 5fr 3fr 1fr 4fr 20px;
   aspect-ratio: 3 / 2;
   container-type: size;
-  border: 2px solid var(--amber);
+  border: 1px solid var(--amber-dim);
   background: black;
 }
 
@@ -398,10 +418,9 @@ body {
 
 /* Access code row — dotted fill, no interaction */
 .input-access-code {
-  color: var(--amber);
+  color: #a56824;
   font-family: monospace;
   font-size: 13px;
-  opacity: 0.4;
   letter-spacing: 2px;
 }
 
@@ -416,7 +435,7 @@ body {
   outline: none;
   caret-color: var(--amber);
 }
-.input-question::placeholder { color: var(--amber-dim); opacity: 0.5; }
+.input-question::placeholder { color: #a56824; opacity: 1; }
 .input-question:disabled { opacity: 0.4; cursor: not-allowed; }
 
 /* ── GitHub link ── */
@@ -514,3 +533,120 @@ kbd {
 .intro-confirm:hover { background: white; }
 
 
+/* ── MAGI boot sequence ── */
+.boot-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(18px, 3vh, 36px) clamp(24px, 5vw, 80px);
+  overflow: auto;
+  background: #050505;
+  color: var(--amber);
+  isolation: isolate;
+  outline: none;
+}
+.boot-screen::before {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border: 1px solid #76241b;
+  border-top: 5px solid #a41413;
+  border-bottom: 5px solid #a41413;
+  pointer-events: none;
+  z-index: -1;
+}
+.boot-screen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(0deg, transparent 0 3px, #0004 3px 4px);
+  opacity: 0.2;
+  z-index: 2;
+}
+.boot-scan { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.boot-scan::after {
+  content: ""; position: absolute; left: 0; right: 0; height: 15%; top: -15%;
+  background: linear-gradient(transparent, #ff8d000c, #ff8d0020);
+  border-bottom: 1px solid #ff8d0033;
+  animation: boot-sweep 4s linear both;
+}
+.boot-header, .boot-footer { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-shrink: 0; }
+.boot-header { border-bottom: 1px solid #7a4400; padding-bottom: 12px; font-size: 11px; letter-spacing: 2px; line-height: 1.6; }
+.boot-nerv { font: 900 38px/1 Georgia, serif; letter-spacing: -3px; color: #e13222; }
+.boot-header-code { text-align: right; margin-left: auto; }
+.boot-content { margin: auto; width: min(100%, 760px); text-align: center; padding: 18px 0; animation: boot-arrive 0.5s ease-out both; }
+.boot-eyebrow { font-size: 11px; letter-spacing: 5px; color: #d3442e; }
+.boot-heading { font: 900 clamp(44px, min(13vh, 18vw), 124px)/1.15 var(--font-ja); font-synthesis: none; letter-spacing: 0.16em; padding-left: 0.16em; text-shadow: 0 0 32px #ff8d0030; margin: 8px 0; }
+.boot-heading-start { font-size: clamp(32px, min(13vh, 11vw), 124px); letter-spacing: 0.06em; padding-left: 0.06em; white-space: nowrap; }
+.boot-subtitle { font-size: 12px; letter-spacing: 5px; }
+.boot-diagram { display: block; width: 100%; height: clamp(150px, 34vh, 340px); margin: 8px auto; overflow: visible; }
+.boot-guides { fill: none; stroke: #ff8d0015; stroke-width: 1; stroke-dasharray: 3 8; }
+.boot-connections { fill: none; stroke: #4c3017; stroke-width: 5; transition: stroke 0.25s; }
+.boot-connections.boot-online { stroke: var(--amber); }
+.boot-unit polygon { fill: #0b0906; stroke: #b56819; stroke-width: 2; transition: fill 0.3s, stroke 0.3s; }
+.boot-unit text { text-anchor: middle; fill: #c17f3c; transition: fill 0.3s; }
+.boot-unit-number { font: 12px var(--font-mono); letter-spacing: 5px; }
+.boot-unit-name { font: bold 23px Helvetica, sans-serif; }
+.boot-unit-status { font: 10px var(--font-mono); letter-spacing: 3px; }
+.boot-unit.boot-online polygon { fill: var(--amber); stroke: var(--amber); }
+.boot-unit.boot-online text { fill: #050505; }
+.boot-unit.boot-online .boot-unit-status { fill: #050505; font-weight: bold; }
+.boot-core { text-anchor: middle; fill: var(--amber); font: bold 26px var(--font-ja); letter-spacing: 4px; }
+.boot-telemetry { display: grid; grid-template-columns: 1fr auto; gap: 9px; text-align: left; font-size: 10px; letter-spacing: 2px; max-width: 570px; margin: auto; }
+.boot-progress { grid-column: 1 / -1; display: flex; gap: 4px; height: 12px; }
+.boot-progress i { flex: 1; background: #ff8d0017; transition: background 0.25s; }
+.boot-progress .boot-filled { background: var(--amber); box-shadow: 0 0 12px #ff8d0025; }
+.boot-status { grid-column: 1 / -1; min-height: 2.5em; line-height: 1.5; }
+.boot-ready .boot-status { color: var(--green-ok); }
+.boot-ready .boot-progress .boot-filled { background: var(--green-ok); }
+.boot-footer { padding-top: 14px; border-top: 5px solid transparent; border-image: repeating-linear-gradient(120deg, #8e281b 0 10px, transparent 10px 20px) 5; font-size: 10px; line-height: 1.8; letter-spacing: 2px; }
+.boot-footer b { color: var(--green-ok); }
+.boot-footer-code { text-align: right; color: var(--amber-dim); }
+.console-footer-right .boot-footer-code { color: #a56824; }
+.intro-confirm:focus-visible { outline: 2px solid var(--green-ok); outline-offset: 5px; }
+.boot-exit { animation: boot-depart 0.4s ease-in forwards; pointer-events: none; }
+@keyframes boot-arrive { from { opacity: 0.5; } to { opacity: 1; } }
+@keyframes boot-sweep { to { top: 100%; } }
+@keyframes boot-depart { to { opacity: 0; } }
+@media (min-width: 1100px) and (min-height: 700px) {
+  .boot-content { width: min(100%, 1100px); padding: 8px 0; }
+  .boot-heading { font-size: clamp(70px, 11vh, 150px); margin: 8px 0; }
+  .boot-diagram { height: clamp(200px, calc(100dvh - 570px), 600px); margin: 8px auto; }
+  .boot-telemetry { max-width: 850px; width: 100%; font-size: 12px; }
+  .boot-progress { height: 16px; gap: 6px; }
+  .boot-eyebrow { font-size: 13px; }
+  .boot-subtitle { font-size: 15px; }
+  .boot-header { font-size: 12px; }
+  .boot-nerv { font-size: 48px; }
+  .boot-footer { font-size: 12px; }
+}
+@media (max-height: 600px) {
+  .boot-screen { padding-top: 16px; padding-bottom: 16px; }
+  .boot-header { padding-bottom: 6px; }
+  .boot-content { padding: 8px 0; }
+  .boot-heading { font-size: 48px; margin: 2px 0; }
+  .boot-diagram { height: 24vh; min-height: 80px; margin: 4px auto; }
+  .boot-footer { padding-top: 6px; }
+  .boot-eyebrow { display: none; }
+}
+@media (max-width: 600px) {
+  .magi-main { padding: 16px 12px; gap: 18px; }
+  .console-banner { align-items: flex-start; }
+  .console-banner h1 { font-size: 16px; }
+  .console-banner h1 span { display: block; font-size: 9px; margin-top: 6px; }
+  .console-status { font-size: 9px; letter-spacing: 1px; max-width: 120px; }
+  .console-footer-right { flex-direction: column; align-items: flex-end; gap: 6px; }
+  .boot-header { gap: 12px; font-size: 8px; letter-spacing: 1px; }
+  .boot-header-code { display: none; }
+  .boot-subtitle { font-size: 10px; letter-spacing: 2px; }
+  .boot-eyebrow { letter-spacing: 2px; }
+  .boot-telemetry, .boot-footer { letter-spacing: 1px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .boot-screen, .boot-exit { animation: none; }
+  .boot-scan { display: none; }
+  .boot-screen *, .boot-screen *::before, .boot-screen *::after { animation: none !important; transition: none !important; }
+}

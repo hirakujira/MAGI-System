@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
+import BootSequence from "@/components/BootSequence";
 import MagiDiagram from "@/components/MagiDiagram";
 import DeliberationInput from "@/components/DeliberationInput";
 import IntroModal from "@/components/IntroModal";
+import { SystemHeader, SystemFooter } from "@/components/SystemChrome";
 import { MagiId, MagiResult, PartialResults, Vote } from "@/types/magi";
 import { deliberateMelchior, deliberateBalthasar, deliberateCasper } from "@/app/actions";
 
@@ -33,7 +35,8 @@ function computeVerdict(results: PartialResults): (Vote | "DEADLOCK") | null {
 }
 
 export default function Home() {
-  const [showIntro, setShowIntro] = useState(true);
+  const [entryPhase, setEntryPhase] = useState<"boot" | "intro" | "ready">("boot");
+  const finishBoot = useCallback(() => setEntryPhase("intro"), []);
   const [topic, setTopic] = useState("");
   const [processingUnits, setProcessingUnits] = useState<Set<MagiId>>(new Set());
   const [partialResults, setPartialResults] = useState<PartialResults>({});
@@ -69,8 +72,18 @@ export default function Home() {
 
   return (
     <>
-      {showIntro && <IntroModal onClose={() => setShowIntro(false)} />}
-    <main className="magi-main">
+      {entryPhase === "boot" && <BootSequence onComplete={finishBoot} />}
+      {entryPhase === "intro" && <IntroModal onClose={() => setEntryPhase("ready")} />}
+    <main className="magi-main" inert={entryPhase !== "ready"} aria-hidden={entryPhase !== "ready"}>
+      <SystemHeader />
+      <div className="magi-console">
+      <div className="console-banner">
+        <h1>MAGI <span>/ 三賢人システム</span></h1>
+        <span className={`console-status${error ? " console-status-error" : isProcessing ? " console-status-active" : ""}`} role="status">
+          <span aria-hidden="true">● </span>
+          {error ? "CONNECTION ERROR" : isProcessing ? "DELIBERATION IN PROGRESS" : "AWAITING INPUT"}
+        </span>
+      </div>
       <div className="system-border">
         <MagiDiagram
           partialResults={partialResults}
@@ -92,6 +105,10 @@ export default function Home() {
           isProcessing={isProcessing}
         />
       </div>
+      </div>
+      <SystemFooter>
+      <div className="console-footer-right">
+      <span className="boot-footer-code">MAGI SYSTEM<br />DELIBERATION CONTROL</span>
       <a
         href="https://github.com/hirakujira/MAGI/"
         target="_blank"
@@ -100,6 +117,8 @@ export default function Home() {
       >
         ⌥ GitHub
       </a>
+      </div>
+      </SystemFooter>
     </main>
     </>
   );

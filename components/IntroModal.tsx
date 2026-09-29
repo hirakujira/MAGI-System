@@ -1,6 +1,6 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useEffect, useRef, useSyncExternalStore } from "react";
 
 interface Lang {
   units: [string, string, string];
@@ -58,6 +58,10 @@ interface Props {
 }
 
 export default function IntroModal({ onClose }: Props) {
+  const confirm = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    confirm.current?.focus({ preventScroll: true });
+  }, []);
   const lang = useSyncExternalStore(
     () => () => {},
     () => {
@@ -112,7 +116,7 @@ export default function IntroModal({ onClose }: Props) {
             <span style={{ color: "var(--amber)" }}>膠着</span>
           </div>
 
-          <button className="intro-confirm" onClick={onClose}>
+          <button ref={confirm} className="intro-confirm" onClick={onClose}>
             {lang.confirm}
           </button>
         </div>
