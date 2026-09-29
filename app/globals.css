@@ -295,9 +295,19 @@ body {
 }
 
 .modal-title {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
   font-family: var(--font-title);
   font-size: 14px;
   letter-spacing: 3px;
+}
+
+.modal-model-info {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 1px;
+  overflow-wrap: anywhere;
 }
 
 .modal-close {

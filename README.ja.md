@@ -71,12 +71,14 @@ docker compose up
 | 変数名              | 説明                              | デフォルト         |
 | ------------------- | --------------------------------- | ------------------ |
 | `OPENAI_API_KEY`    | OpenAI API キー（MELCHIOR-1）     | —                  |
-| `OPENAI_MODEL`      | GPT モデル名                     | `gpt-5.6-luna`      |
+| `OPENAI_MODEL`      | GPT モデル名                     | `gpt-6-luna`       |
 | `OPENAI_REASONING_EFFORT` | GPT の推論レベル（`low`、`medium`、`high`） | `low` |
 | `ANTHROPIC_API_KEY` | Anthropic API キー（BALTHASAR-2） | —                  |
-| `ANTHROPIC_MODEL`   | Anthropic モデル名                | `claude-haiku-4-5` |
+| `ANTHROPIC_MODEL`   | Anthropic モデル名                | `claude-sonnet-5-5` |
+| `ANTHROPIC_EFFORT`  | Claude Sonnet 5.5 の推論レベル（`low`、`medium`、`high`） | `low` |
 | `GOOGLE_API_KEY`    | Google AI API キー（CASPER-3）    | —                  |
-| `GOOGLE_MODEL`      | Google モデル名                   | `gemini-3.5-flash-lite` |
+| `GOOGLE_MODEL`      | Google モデル名                   | `gemini-3.8-flash` |
+| `GOOGLE_THINKING_LEVEL` | Gemini の思考レベル（`low`、`medium`、`high`） | `low` |
 
 ## 使い方
 
@@ -84,7 +86,7 @@ docker compose up
 2. 3 台のユニットが同時に独立して審議を開始
 3. 応答が届いたユニットから順にフリッカーが止まり、結果を表示
 4. 全ユニットが完了した時点で、多数決により最終決定を表示
-5. 各ユニットをクリックすると詳細な判断理由を確認できます
+5. 各ユニットをクリックすると判断理由、使用モデル、推論レベルを確認できます
 
 ## 著作権表示
 

@@ -155,7 +155,10 @@ export default function MagiDiagram({ partialResults, processingUnits, finalVerd
           <div className="modal-box" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <span className="modal-title">
-                {modalResult.id} • {modalResult.number}
+                <span>{modalResult.id} • {modalResult.number}</span>
+                <span className="modal-model-info">
+                  MODEL: {modalResult.model} • REASONING: {modalResult.reasoningLevel}
+                </span>
               </span>
               <button className="modal-close" onClick={() => setModalId(null)}>✕</button>
             </div>

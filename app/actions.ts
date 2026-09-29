@@ -1,6 +1,6 @@
 "use server";
 
-import { queryMelchior, queryBalthasar, queryCasper } from "@/lib/ai-clients";
+import { getMagiModelInfo, queryMelchior, queryBalthasar, queryCasper } from "@/lib/ai-clients";
 import { MagiResult } from "@/types/magi";
 
 type MagiAnswer = Pick<MagiResult, "reasoning" | "vote" | "isCritical">;
@@ -11,12 +11,14 @@ async function deliberate(
   number: MagiResult["number"],
   query: (topic: string) => Promise<MagiAnswer>,
 ): Promise<MagiResult> {
+  const modelInfo = getMagiModelInfo(id);
   try {
-    return { id, number, ...await query(topic) };
+    return { id, number, ...modelInfo, ...await query(topic) };
   } catch (err) {
     return {
       id,
       number,
+      ...modelInfo,
       reasoning: "SYSTEM ERROR: Connection lost",
       vote: "ABSTAIN",
       error: String(err),

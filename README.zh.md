@@ -71,12 +71,14 @@ docker compose up
 | 變數名稱            | 說明                              | 預設值             |
 | ------------------- | --------------------------------- | ------------------ |
 | `OPENAI_API_KEY`    | OpenAI API 金鑰（MELCHIOR-1）     | —                  |
-| `OPENAI_MODEL`      | GPT 模型名稱                     | `gpt-5.6-luna`      |
+| `OPENAI_MODEL`      | GPT 模型名稱                     | `gpt-6-luna`       |
 | `OPENAI_REASONING_EFFORT` | GPT 推理程度（`low`、`medium` 或 `high`） | `low` |
 | `ANTHROPIC_API_KEY` | Anthropic API 金鑰（BALTHASAR-2） | —                  |
-| `ANTHROPIC_MODEL`   | Anthropic 模型名稱                | `claude-haiku-4-5` |
+| `ANTHROPIC_MODEL`   | Anthropic 模型名稱                | `claude-sonnet-5-5` |
+| `ANTHROPIC_EFFORT`  | Claude Sonnet 5.5 推理程度（`low`、`medium` 或 `high`） | `low` |
 | `GOOGLE_API_KEY`    | Google AI API 金鑰（CASPER-3）    | —                  |
-| `GOOGLE_MODEL`      | Google 模型名稱                   | `gemini-3.5-flash-lite` |
+| `GOOGLE_MODEL`      | Google 模型名稱                   | `gemini-3.8-flash` |
+| `GOOGLE_THINKING_LEVEL` | Gemini 思考程度（`low`、`medium` 或 `high`） | `low` |
 
 ## 使用方式
 
@@ -84,7 +86,7 @@ docker compose up
 2. 三台電腦同時開始獨立審議
 3. 率先完成的電腦立即停止閃爍並顯示結果
 4. 三台全部完成後，以多數決顯示最終裁決
-5. 點擊任一電腦可查看詳細推理說明
+5. 點擊任一電腦可查看詳細推理、使用的模型與推理程度
 
 ## 版權聲明
 

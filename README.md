@@ -71,12 +71,14 @@ docker compose up
 | Variable            | Description                     | Default            |
 | ------------------- | ------------------------------- | ------------------ |
 | `OPENAI_API_KEY`    | OpenAI API key (MELCHIOR-1)     | —                  |
-| `OPENAI_MODEL`      | GPT model name                 | `gpt-5.6-luna`      |
+| `OPENAI_MODEL`      | GPT model name                  | `gpt-6-luna`       |
 | `OPENAI_REASONING_EFFORT` | GPT reasoning effort (`low`, `medium`, or `high`) | `low` |
 | `ANTHROPIC_API_KEY` | Anthropic API key (BALTHASAR-2) | —                  |
-| `ANTHROPIC_MODEL`   | Anthropic model name            | `claude-haiku-4-5` |
+| `ANTHROPIC_MODEL`   | Anthropic model name            | `claude-sonnet-5-5` |
+| `ANTHROPIC_EFFORT`  | Sonnet 5.5 reasoning effort (`low`, `medium`, or `high`) | `low` |
 | `GOOGLE_API_KEY`    | Google AI API key (CASPER-3)    | —                  |
-| `GOOGLE_MODEL`      | Google model name               | `gemini-3.5-flash-lite` |
+| `GOOGLE_MODEL`      | Google model name               | `gemini-3.8-flash` |
+| `GOOGLE_THINKING_LEVEL` | Gemini thinking level (`low`, `medium`, or `high`) | `low` |
 
 ## How to Use
 
@@ -84,7 +86,7 @@ docker compose up
 2. All three units begin deliberating simultaneously and independently
 3. Each unit stops flickering and shows its result as soon as it finishes
 4. The final verdict is determined by majority vote once all three complete
-5. Click any unit to read its detailed reasoning
+5. Click any unit to see its reasoning, model, and reasoning level
 
 ## Copyright Notice
 
