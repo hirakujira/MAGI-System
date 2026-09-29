@@ -207,7 +207,7 @@ body {
   justify-self: center;
   z-index: 3;
   pointer-events: none;
-  transform: translateY(4.5cqw);
+  transform: translateY(3.5cqw);
 }
 
 /* ── Shared wise-man styles ── */
