@@ -110,42 +110,47 @@ body {
 /* ══════════════════════════════════════════
    MAGI CSS Grid — authentic triangular layout
    Grid tracks:
-     Columns: 20px 2fr 0.5fr 1fr 0.5fr 2fr 20px  (lines 1–8)
-     Rows:    20px 2fr 2fr   1fr 3fr   20px        (lines 1–7)
+     Columns: proportional margins + 2 : 0.5 : 1 : 0.5 : 2
+     Rows: proportional margins + 5 : 3 : 1 : 4
+     Explicit row percentages prevent content from stretching the mobile layout.
 
    Placement (1-indexed line numbers):
-     BALTHASAR  col 3/6  row 2/5  — top center
+     BALTHASAR  col 3/6  row 2/4  — top center
      CASPER     col 2/4  row 4/6  — bottom left
      MELCHIOR   col 5/7  row 4/6  — bottom right
-     conn-CB    col 3    row 4    — rotate(-54deg)
-     conn-BM    col 5    row 4    — rotate(54deg)
-     conn-CM    col 4    row 5    — horizontal
+     Connections use a shared 900 × 600 SVG coordinate system.
      sys-status col 2    row 3
      verdict    col 6    row 3
-     title      col 4    row 5
+     title      col 4    row 4
 ══════════════════════════════════════════ */
 
 .magi-grid {
+  position: relative;
   display: grid;
-  grid-template-columns: 20px 2fr 0.5fr 1fr 0.5fr 2fr 20px;
-  grid-template-rows: 20px 5fr 3fr 1fr 4fr 20px;
+  grid-template-columns: 3.333333% minmax(0, 2fr) minmax(0, 0.5fr) minmax(0, 1fr) minmax(0, 0.5fr) minmax(0, 2fr) 3.333333%;
+  grid-template-rows: 3.333333% 35.897436% 21.538462% 7.179487% 28.717949% 3.333333%;
   aspect-ratio: 3 / 2;
-  container-type: size;
+  container-type: inline-size;
+  width: 100%;
+  min-width: 0;
   border: 1px solid var(--amber-dim);
   background: black;
 }
 
-/* ── Connection bars ── */
-.magi-conn {
-  height: 10px;
-  background: var(--amber);
-  align-self: center;
-  margin: -10%;
+.magi-grid > * { min-width: 0; min-height: 0; }
+
+/* Lines scale together with the 3:2 diagram, underneath the unit shapes. */
+.magi-connections {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: var(--amber);
+  stroke-width: 7.5;
+  pointer-events: none;
   z-index: 1;
 }
-.conn-cb { grid-column: 3; grid-row: 4; transform: translate(-25px, -40px) rotate(-54deg); }
-.conn-bm { grid-column: 5; grid-row: 4; transform: translate(25px, -40px) rotate(54deg);  }
-.conn-cm { grid-column: 4; grid-row: 5; }
 
 /* ── System status block ── */
 .magi-sys-status {
@@ -153,27 +158,27 @@ body {
   grid-row: 3;
   font-family: var(--font-sans);
   font-weight: bold;
-  font-size: 4cqmin;
+  font-size: 1.8cqw;
+  line-height: 1.2;
   color: var(--amber);
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 0.3em;
   padding-left: 0.5em;
+  transform: translateY(-0.8cqw);
 }
-.magi-sys-status > div:first-child { font-size: 8cqmin; }
+.magi-sys-status > div:first-child { font-size: 3.8cqw; }
 .magi-sys-status-inner {
-  margin-left: auto;
-  margin-right: 2cqmin;
-  margin-bottom: 60px;
+  margin: 0;
 }
 
 /* ── Verdict badge ── */
 .magi-verdict {
   grid-column: 6;
   grid-row: 3;
-  border: 2px solid;
-  padding: 6px;
+  border: max(1px, 0.166667cqw) solid;
+  padding: 0.5cqw;
   width: fit-content;
   height: fit-content;
   align-self: center;
@@ -181,9 +186,9 @@ body {
   z-index: 3;
 }
 .magi-verdict-inner {
-  border: 2px solid currentColor;
-  padding: 4px 14px;
-  font-size: 8cqmin;
+  border: max(1px, 0.166667cqw) solid currentColor;
+  padding: 0.333333cqw 1.166667cqw;
+  font-size: 5.333333cqw;
   font-weight: bold;
   font-family: var(--font-ja);
   white-space: nowrap;
@@ -195,31 +200,35 @@ body {
   grid-row: 4;
   color: var(--amber);
   text-align: center;
-  font-size: 9cqmin;
+  font-size: 6cqw;
   font-weight: bold;
   font-family: var(--font-ja);
   align-self: center;
   justify-self: center;
   z-index: 3;
   pointer-events: none;
+  transform: translateY(4.5cqw);
 }
 
 /* ── Shared wise-man styles ── */
 .wise-man {
   display: flex;
   background: var(--amber);
-  padding: 2px;
+  padding: max(1px, 0.166667cqw);
   z-index: 2;
 }
 
 .wise-inner {
   width: 100%;
   height: 100%;
+  min-width: 0;
+  min-height: 0;
+  white-space: nowrap;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: Helvetica, sans-serif;
-  font-size: 6cqmin;
+  font-size: 3.5cqw;
   font-weight: bold;
   color: black;
   /* background set via CSS variable so animation can override it */
@@ -232,7 +241,7 @@ body {
   flex-direction: column;
   justify-content: center;
   overflow: hidden;
-  padding: 2px 4px;
+  padding: 0.166667cqw 0.333333cqw;
 }
 .magi-header-deco.left  { grid-column: 1 / 3; grid-row: 2; }
 .magi-header-deco.right { grid-column: 6 / 8; grid-row: 2; }
@@ -240,18 +249,19 @@ body {
 .magi-header-deco-bar {
   background: transparent;
   border: 1px solid #277547;
-  height: 4px;
-  margin: 2px 0;
+  height: 0.333333cqw;
+  flex-shrink: 0;
+  margin: 0.166667cqw 0;
 }
 
 .magi-header-deco span {
   color: var(--amber);
-  font-size: 10cqmin;
+  font-size: 6.666667cqw;
   font-weight: bold;
   font-family: var(--font-ja);
   display: flex;
   justify-content: center;
-  transform: scaleX(2);
+  transform: scaleX(1.35);
   transform-origin: center;
 }
 
@@ -398,7 +408,7 @@ body {
 /* ── Input container — terminal style (access code / question rows) ── */
 .input-container {
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
   column-gap: 10px;
   row-gap: 5px;
@@ -425,6 +435,7 @@ body {
 }
 
 .input-question {
+  min-width: 0;
   background: #1f1203;
   border: 1px solid var(--amber);
   color: var(--amber);
@@ -633,6 +644,12 @@ kbd {
   .boot-eyebrow { display: none; }
 }
 @media (max-width: 600px) {
+  .input-question { font-size: 16px; height: 32px; }
+  .input-access-code { min-width: 0; overflow: hidden; white-space: nowrap; }
+  .magi-console { margin: 0 auto; }
+  .magi-main > .boot-footer { margin-top: auto; }
+  .modal-overlay { padding: 12px; }
+  .modal-box { max-height: calc(100dvh - 24px); overflow-y: auto; }
   .magi-main { padding: 16px 12px; gap: 18px; }
   .console-banner { align-items: flex-start; }
   .console-banner h1 { font-size: 16px; }

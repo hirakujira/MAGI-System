@@ -77,9 +77,9 @@ export default function MagiDiagram({ partialResults, processingUnits, finalVerd
   return (
     <>
       <div className="magi-grid">
-        <div className="magi-conn conn-cb" />
-        <div className="magi-conn conn-bm" />
-        <div className="magi-conn conn-cm" />
+        <svg className="magi-connections" viewBox="0 0 900 600" aria-hidden="true">
+          <path d="M350 331L314 424 M550 331L586 424 M375 494H525" />
+        </svg>
 
         {/* System status */}
         <div className="magi-sys-status">
